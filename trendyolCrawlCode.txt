@@ -1,0 +1,17 @@
+var jqry = document.createElement('script');
+jqry.src = "https://code.jquery.com/jquery-3.3.1.min.js";
+document.getElementsByTagName('head')[0].appendChild(jqry);
+jQuery.noConflict();
+
+newElements=[]
+$('.p-card-wrppr').each((i, ele) => {
+tmp = {};
+tmp.category = 'bilgisayar';
+tmp.imgUrl = $(ele).find('.p-card-img').attr('src');
+tmp.price = $(ele).find('.prc-box-sllng').text().trim();
+tmp.firm = $(ele).find('.prdct-desc-cntnr-ttl').text().trim();
+tmp.name = $(ele).find('.prdct-desc-cntnr-name').text().trim();
+newElements.push(tmp);
+}
+)
+newElements

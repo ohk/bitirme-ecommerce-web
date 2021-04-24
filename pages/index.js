@@ -1,65 +1,128 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import Product from "../components/product";
+import ProductJSON from "../productsJSON";
+import { useEffect, useState } from "react";
+import Navbar from "../components/navbar";
 export default function Home() {
+  const [filters, setFilters] = useState([
+    { type: 0, data: [] },
+    { type: 1, data: [] },
+  ]);
+  const [sepet, setSepet] = useState([]);
+  const [activeFilter, setActiveFilter] = useState({
+    type: -1,
+    name: "",
+  });
+  const [products, setProducts] = useState([]);
+
+  const updateFilter = (filterType, filterName) => {
+    if (
+      (activeFilter.type === filterType && activeFilter.name === filterName) ||
+      filterType === -1
+    ) {
+      setActiveFilter({
+        type: -1,
+        name: "",
+      });
+      setProducts(ProductJSON);
+    } else {
+      setActiveFilter({
+        type: filterType,
+        name: filterName,
+      });
+      setProducts(
+        filterType === 0
+          ? ProductJSON.filter((o) => o.category === filterName)
+          : ProductJSON.filter((o) => o.firm === filterName)
+      );
+    }
+  };
+
+  const updateSepet = (item) => {
+    localStorage.setItem("basket", JSON.stringify([...sepet, item]));
+    setSepet([...sepet, item]);
+  };
+
+  useEffect(() => {
+    const firms = [];
+    const categories = [];
+    ProductJSON.map((i) => {
+      if (firms.indexOf(i.firm) === -1) firms.push(i.firm);
+      if (categories.indexOf(i.category) === -1) categories.push(i.category);
+    });
+    setProducts(ProductJSON);
+    setFilters([
+      { type: -1, data: ["Tümünü Göster"] },
+      { type: 0, data: categories },
+      { type: 1, data: firms },
+    ]);
+  }, []);
+
   return (
-    <div className={styles.container}>
+    <div className="w-full h-full pr-10 pl-10">
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+      <Navbar itemCount={sepet.length} />
+      <div className={"grid grid-cols-5"}>
+        <div className={"col-span-1"}>
+          {filters.map((i) => {
+            return (
+              <div>
+                <div className={"text-gray-900 font-bold text-2xl pt-3 pb-3"}>
+                  {i.type === 0
+                    ? "Kategoriler"
+                    : i.type === 1
+                    ? "Markalar"
+                    : ""}
+                </div>
+                {i.data.map((t) => {
+                  return (
+                    <div
+                      className={"text-gray-700 text-sm"}
+                      onClick={() => {
+                        updateFilter(i.type, t);
+                      }}
+                    >
+                      {t}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
-      </main>
-
+        {/*Product Array*/}
+        <div className={"col-span-4"}>
+          <div className={"flex flex-wrap"}>
+            {products.map((i) => {
+              return (
+                <Product
+                  onClick={() => {
+                    updateSepet(i);
+                  }}
+                  title={i.firm}
+                  details={i.name}
+                  price={i.price}
+                  imgUrl={i.imgUrl}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
       <footer className={styles.footer}>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
       </footer>
     </div>
-  )
+  );
 }
