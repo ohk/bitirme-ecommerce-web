@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }) {
   const [buyStatus, setBuyStatus] = useState(0);
   const handleMouse = (e, type) => {
     e.persist();
-    if (buyStatus === false) {
+    if (buyStatus === 0) {
       setData([
         ...data,
         {
@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    if (buyStatus === true) {
+    if (buyStatus === 0) {
       localStorage.setItem("mouseData", JSON.stringify([]));
       setData([]);
       setBuyStatus(true);
@@ -57,6 +57,13 @@ function MyApp({ Component, pageProps }) {
       },
       method: "POST",
     });
+
+    if (buyStatus === 0) {
+      localStorage.setItem("mouseData", JSON.stringify([]));
+      setData([]);
+      setBuyStatus(true);
+      localStorage.setItem("basket", JSON.stringify([]));
+    }
 
     const result = await res.json();
     alert(result.status);
