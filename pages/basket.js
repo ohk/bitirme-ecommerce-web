@@ -30,8 +30,8 @@ const Basket = ({ onBuy = function () {} }) => {
           </tr>
         </thead>
         <tbody>
-          {sepet.map((i) => (
-            <tr>
+          {sepet.map((i, index) => (
+            <tr key={index.toString()}>
               <td className="px-10">
                 <img src={i.imgUrl} className="w-20" />
               </td>

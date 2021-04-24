@@ -1,21 +1,6 @@
 const mongoose = require("mongoose");
-
+import Record from "../../components/mongoSchema";
 const uri = process.env.DB_URI;
-
-const recordSchema = new mongoose.Schema({
-  time: { type: Date, default: Date.now },
-  buyStatus: Number,
-  mouseData: [
-    {
-      x: Number,
-      y: Number,
-      type: Number,
-      time: Date,
-    },
-  ],
-});
-
-const MouseRecord = mongoose.model("MouseRecord", recordSchema);
 
 mongoose.connect(
   uri,
@@ -27,12 +12,18 @@ mongoose.connect(
 
 module.exports = function (req, res) {
   if (req.method === "GET") {
-    res.status(404);
+    res.status(500).json({ a: "Hello World" });
   } else if (req.method === "POST") {
-    const newRecord = new MouseRecord(req.body);
+    let newRecord = new Record(req.body);
     newRecord
       .save()
-      .then((newRecord) => res.status(200).json(newRecord))
-      .catch((err) => res.status(500).json(err.message));
+      .then((response) => {
+        console.log(response);
+        res.status(200).json({ a: "ok!" });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err.message);
+      });
   }
 };

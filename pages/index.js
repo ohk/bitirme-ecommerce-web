@@ -57,6 +57,8 @@ export default function Home() {
       { type: 0, data: categories },
       { type: 1, data: firms },
     ]);
+    const localData = localStorage.getItem("basket");
+    setSepet(JSON.parse(localData));
   }, []);
 
   return (
@@ -68,9 +70,9 @@ export default function Home() {
       <Navbar itemCount={sepet.length} />
       <div className={"grid grid-cols-5"}>
         <div className={"col-span-1"}>
-          {filters.map((i) => {
+          {filters.map((i, index) => {
             return (
-              <div>
+              <div key={index + "1111111" + i.toString()}>
                 <div className={"text-gray-900 font-bold text-2xl pt-3 pb-3"}>
                   {i.type === 0
                     ? "Kategoriler"
@@ -78,9 +80,10 @@ export default function Home() {
                     ? "Markalar"
                     : ""}
                 </div>
-                {i.data.map((t) => {
+                {i.data.map((t, index) => {
                   return (
                     <div
+                      key={index.toString() + t.toString()}
                       className={"text-gray-700 text-sm"}
                       onClick={() => {
                         updateFilter(i.type, t);
@@ -97,9 +100,10 @@ export default function Home() {
         {/*Product Array*/}
         <div className={"col-span-4"}>
           <div className={"flex flex-wrap"}>
-            {products.map((i) => {
+            {products.map((i, index) => {
               return (
                 <Product
+                  key={i.toString() + index.toString()}
                   onClick={() => {
                     updateSepet(i);
                   }}
@@ -113,16 +117,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
   );
 }

@@ -21,31 +21,6 @@ function MyApp({ Component, pageProps }) {
     }
   };
 
-  const downloadData = async (mouseData, buyStatus) => {
-    const blob = new Blob(
-      [
-        JSON.stringify({
-          buyStatus: buyStatus,
-          mouseData: mouseData,
-        }),
-      ],
-      { type: "application/json" }
-    );
-    const href = await URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = href;
-    link.download = Date.now() + ".json";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    if (buyStatus === 0) {
-      localStorage.setItem("mouseData", JSON.stringify([]));
-      setData([]);
-      setBuyStatus(true);
-      localStorage.setItem("basket", JSON.stringify([]));
-    }
-  };
-
   const postData = async (mouseData, buyStatus) => {
     const res = await fetch("/api/postRecord", {
       body: JSON.stringify({
@@ -58,7 +33,7 @@ function MyApp({ Component, pageProps }) {
       method: "POST",
     });
 
-    if (buyStatus === 0) {
+    if (buyStatus === 1) {
       localStorage.setItem("mouseData", JSON.stringify([]));
       setData([]);
       setBuyStatus(true);
@@ -66,8 +41,6 @@ function MyApp({ Component, pageProps }) {
     }
 
     const result = await res.json();
-    alert(result.status);
-    // result.user => 'Ada Lovelace'
   };
   useEffect(() => {
     const mouseData = localStorage.getItem("mouseData");
