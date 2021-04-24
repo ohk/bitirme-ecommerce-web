@@ -8,4 +8,5 @@ const recordSchema = new mongoose.Schema({
   mouseData: [],
 });
 
-module.exports = mongoose.model("MouseRecord", recordSchema);
+module.exports =
+  mongoose.models.MouseRecord || mongoose.model("MouseRecord", recordSchema);

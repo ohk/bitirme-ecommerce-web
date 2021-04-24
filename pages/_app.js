@@ -1,8 +1,11 @@
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { toast, snackbar } from "tailwind-toast";
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
   const [data, setData] = useState([]);
   const [buyStatus, setBuyStatus] = useState(0);
   const handleMouse = (e, type) => {
@@ -38,7 +41,7 @@ function MyApp({ Component, pageProps }) {
     if (buyStatus === 1) {
       localStorage.setItem("mouseData", JSON.stringify([]));
       setData([]);
-      setBuyStatus(true);
+      setBuyStatus(0);
       localStorage.setItem("basket", JSON.stringify([]));
     }
 
@@ -48,7 +51,13 @@ function MyApp({ Component, pageProps }) {
     const mouseData = localStorage.getItem("mouseData");
     mouseData !== null &&
       mouseData !== JSON.stringify([]) &&
-      postData(mouseData, 0);
+      postData(mouseData, 0)
+        .then((res) =>
+          toast().success("Mouse Kaydı", "iletimi başarılı!").as("pill").show()
+        )
+        .catch((err) =>
+          toast().warning("Mouse Kaydı", "iletimi başarısız!").as("pill").show()
+        );
   }, []);
 
   return (
@@ -56,7 +65,28 @@ function MyApp({ Component, pageProps }) {
       onMouseMove={(e) => handleMouse(e, 0)}
       onClick={(e) => handleMouse(e, 1)}
     >
-      <Component {...pageProps} onBuy={() => postData(data, 1)} />
+      <Component
+        {...pageProps}
+        onBuy={() => {
+          setBuyStatus(1);
+          localStorage.setItem("basket", JSON.stringify([]));
+          router.push("/").then((r) =>
+            postData(data, 1)
+              .then((res) =>
+                toast()
+                  .success("Siparişiniz başarıyla", "oluşturulmuştur!")
+                  .as("pill")
+                  .show()
+              )
+              .catch((err) =>
+                toast()
+                  .warning("Sipariş oluşturulması başarısız", "oldu!")
+                  .as("pill")
+                  .show()
+              )
+          );
+        }}
+      />
     </div>
   );
 }

@@ -7,7 +7,7 @@ const Product = ({
   onClick = function () {},
 }) => {
   return (
-    <div className="py-6 mr-2 ml-2">
+    <div className="py-6 ml-2">
       <div className="flex max-w-md bg-gray-200 shadow-lg rounded-lg overflow-hidden">
         <div className={cn("w-1/3 bg-cover")}>
           <img src={imgUrl} />

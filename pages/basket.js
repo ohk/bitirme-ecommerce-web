@@ -8,11 +8,12 @@ const Basket = ({ onBuy = function () {} }) => {
     const localData = localStorage.getItem("basket");
     localData !== null && setSepet(JSON.parse(localData));
     let innerTotal = 0.0;
-    sepet.map((i) => {
-      innerTotal += parseFloat(
-        i.price.replace(" TL", "").replaceAll(".", "").replaceAll(",", ".")
-      );
-    });
+    localData !== null &&
+      JSON.parse(localData).map((i) => {
+        innerTotal += parseFloat(
+          i.price.replace(" TL", "").replaceAll(".", "").replaceAll(",", ".")
+        );
+      });
     setTotal(innerTotal);
   }, []);
 

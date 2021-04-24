@@ -64,11 +64,11 @@ export default function Home() {
   return (
     <div className="w-full h-full pr-10 pl-10">
       <Head>
-        <title>Create Next App</title>
+        <title>YTU BITIRME</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar itemCount={sepet.length} />
-      <div className={"grid grid-cols-5"}>
+      <div className={"grid grid-cols-7"}>
         <div className={"col-span-1"}>
           {filters.map((i, index) => {
             return (
@@ -98,7 +98,7 @@ export default function Home() {
           })}
         </div>
         {/*Product Array*/}
-        <div className={"col-span-4"}>
+        <div className={"col-span-6"}>
           <div className={"flex flex-wrap"}>
             {products.map((i, index) => {
               return (
