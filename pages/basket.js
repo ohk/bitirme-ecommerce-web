@@ -6,9 +6,9 @@ const Basket = ({ onBuy = function () {} }) => {
   const [total, setTotal] = useState(0);
   useEffect(() => {
     const localData = localStorage.getItem("basket");
-    setSepet(JSON.parse(localData));
+    localData !== null && setSepet(JSON.parse(localData));
     let innerTotal = 0.0;
-    JSON.parse(localData).map((i) => {
+    sepet.map((i) => {
       innerTotal += parseFloat(
         i.price.replace(" TL", "").replaceAll(".", "").replaceAll(",", ".")
       );

@@ -58,7 +58,7 @@ export default function Home() {
       { type: 1, data: firms },
     ]);
     const localData = localStorage.getItem("basket");
-    setSepet(JSON.parse(localData));
+    localData !== null && setSepet(JSON.parse(localData));
   }, []);
 
   return (
