@@ -47,11 +47,12 @@ function MyApp({ Component, pageProps }) {
 
     const result = await res.json();
   };
+
   useEffect(() => {
     const mouseData = localStorage.getItem("mouseData");
     mouseData !== null &&
       mouseData !== JSON.stringify([]) &&
-      postData(mouseData, 0)
+      postData(JSON.parse(mouseData), 0)
         .then((res) =>
           toast().success("Mouse Kaydı", "iletimi başarılı!").as("pill").show()
         )
