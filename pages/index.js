@@ -84,7 +84,7 @@ export default function Home() {
                   return (
                     <div
                       key={index.toString() + t.toString()}
-                      className={"text-gray-700 text-sm"}
+                      className={"text-gray-700 text-sm cursor-pointer"}
                       onClick={() => {
                         updateFilter(i.type, t);
                       }}
