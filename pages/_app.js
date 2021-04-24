@@ -24,6 +24,8 @@ function MyApp({ Component, pageProps }) {
   const postData = async (mouseData, buyStatus) => {
     const res = await fetch("/api/postRecord", {
       body: JSON.stringify({
+        windowX: window.innerWidth,
+        windowY: window.innerHeight,
         buyStatus: buyStatus,
         mouseData: mouseData,
       }),
@@ -44,7 +46,6 @@ function MyApp({ Component, pageProps }) {
   };
   useEffect(() => {
     const mouseData = localStorage.getItem("mouseData");
-    console.log(mouseData);
     mouseData !== null &&
       mouseData !== JSON.stringify([]) &&
       postData(mouseData, 0);
